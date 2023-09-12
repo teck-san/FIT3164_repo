@@ -12,3 +12,19 @@
         color : blue;
     }
 }
+
+.section_1{
+    .graph_result{
+        display: flex;
+        justify-content: space-between;
+
+        .measurements{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            .forecasted-price{
+                background-color: aqua;
+            }
+        }
+    }
+}
