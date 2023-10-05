@@ -2,6 +2,7 @@ class HomeController < ApplicationController
 
     def index
         @forecasted = `python3 lib/assets/python/model.py`
+        @forelist=[1,2,3,4,5]
         @data_keys = [
             'January',
             'February',

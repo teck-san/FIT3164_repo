@@ -5,33 +5,75 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="/dist/output.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+  
+  
 </head>
 <body>
-  <div class="section_1">
-    <div class="graph_result">
-        <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-            Result Visualization
-            <%= image_tag("placeholder2.jpg", width: "1000px", height: "500px",alt:"place holder")%>
-            <canvas id="myChart" width="200px" height="100px" data-labels="<%= @data_keys %>" data-data="<%= @data_values %>" ></canvas>
+  <div class = "container">
+    <div class="section_all section_1">
+      <div class="graph_result">
+          <div class="graph_result_1">
+            <div class="graph_result_2">
+              <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                  Result Visualization 
+              </h1>
+              
+              <div id= "chart-container-1" >
+                <canvas id="myChart"  style="width: 1000px; height: 500px;" data-labels="<%= @data_keys %>" data-data="<%= @data_values %>" ></canvas>
+              </div>
+
+              <div id= "chart-container-2" >
+                <canvas id="myChart2"  style="width: 500px; height: 250px;" data-labels="<%= @data_keys %>" data-data="<%= @data_values %>" ></canvas>
+              </div>
+
+              <div id= "chart-container-3" >
+                <canvas id="myChart3"  style="width: 500px; height: 250px;" data-labels="<%= @data_keys %>" data-data="<%= @data_values %>" ></canvas>
+              </div>
+
+            </div>
+
+      <div class="dropdown">
+        <button onclick="myFunction()" class="dropbtn inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">Dropdown</button>
+        <div id="myDropdown" class="dropdown-content">
+          <button onclick="showChart('first')" class = "first" >Homeee</button>
+          <button onclick="showChart('second')" class = "second" >About</a>
+          <button onclick="showChart('third')" class = "third" >Contact</a>
+        </div>
+      </div>
+  </div>
+  </div>
+  </div>
+
+    <div class ="section_all section_2">
+      <div class="measurements">
+      <div class="forecasted-price">
+        <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Forecasted Price</h1>
+        <div class="forecasted-price-in">
+         
+            <p id="forecast">100</p>
+        </div>
         
-            
-        </h1>
 
-    <div class="measurements">
-        <div class="forecasted-price">
-          <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Forecasted Price</h1>
-          <div class="forecasted-price-in">
-            <p> <%=@forecasted%> </p>
-          </div>
-          
+      </div>
+      
+      <div class ="forecasted-perform">
+        <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">performance</h1>
+        <p id="perform">100</p>
 
-        </div>
-        <div class ="forecasted-perform">
-          <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">performance</h1>
+      </div>
 
-        </div>
+      </div>
+
+
 
     </div>
-  </div>
+</div>
+
+
+<%= javascript_include_tag('chart_result.js') %>
+<%= javascript_include_tag('dropdown.js') %>
 </body>
 </html>
+
+
+
