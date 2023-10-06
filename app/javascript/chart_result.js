@@ -50,10 +50,6 @@ let chart = new Chart(ctx, {
         2023-08-09   ,
         2023-08-10    ,
         2023-08-11    ,
-        2023-08-14    ,
-        2023-08-15    ,
-        2023-08-16   ,
-        2023-08-17    ,
         2023-08-18    ,
         2023-08-21    ,
         2023-08-22    ,
@@ -85,27 +81,23 @@ let chart = new Chart(ctx, {
         enabled: true,
         duration: 5000, // Total duration of the animation in milliseconds
         onProgress: function (animation){
-            let chartInstance = this.chart,
-                    dataset = chartInstance.data.datasets[0];
+                chartInstance = this.chart
                 
-                for (let i = 0; i < dataset.data.length - 1; i++) {
-                    let progress = animation.currentStep / animation.numSteps;
-                    let nextDataPoint = dataset.data[i + 1];
+                for (let i = 0; i < data.length - 1; i++) {
+                    progress = animation.currentStep / animation.numSteps;
+                    nextDataPoint = data[i + 1];
                     if (progress > (i + 1) / dataset.data.length) {
                         nextDataPoint._noAnimation = true;
                     }
                 }
-                chartInstance.update();
+                this.update();
 
         },
         onComplete: () => {
-            let chartInstance = this.chart,
-                    dataset = chartInstance.data.datasets[0];
-                
-                for (let i = 0; i < dataset.data.length; i++) {
-                    dataset.data[i]._noAnimation = true;
+                for (let i = 0; i < data.length; i++) {
+                    data[i]._noAnimation = true;
                 }
-                chartInstance.update();
+                this.update();
         }
     },
     
