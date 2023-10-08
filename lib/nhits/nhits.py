@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 import torch
 import os
+import sys
 
 
 def read_csv(filename):
@@ -21,7 +22,7 @@ def scale_value(x, max):
 def descale_value(y, max):
     return y*max
 
-def preprocess_data(df):
+def preprocess_data(df,scaling=True):
     df=df[['Date','High','Low','Close','Volume']]
     df=df.rename(columns={'Date': 'ds'})
     # Calculate the EMV
@@ -45,7 +46,8 @@ def preprocess_data(df):
     scale = df['Close'].max()
     df = df.melt(id_vars=['ds'], var_name='unique_id', value_name='y')
     df['ds']=df['ds'].apply(lambda x:pd.Timestamp(x))
-    df['y'] = df['y'].apply(lambda x: scale_value(x,scale))
+    if(scaling):
+        df['y'] = df['y'].apply(lambda x: scale_value(x,scale))
     return df,scale
 
 
@@ -56,8 +58,8 @@ def predict_in_sample(filename):
     input_data=df[-180:-60]
     input_data,scale=preprocess_data(input_data)
     test_data=df[-60:]
-    test_data,test_scale=preprocess_data(test_data)
-    nhits_model = NeuralForecast.load(path='./nhits//model/')
+    test_data,test_scale=preprocess_data(test_data,False)
+    nhits_model = NeuralForecast.load(path='./lib//nhits/model/')
     prediction=nhits_model.predict(df=input_data).reset_index()
     close_prediction=prediction[prediction['unique_id']=='Close']
     test_data=test_data[test_data['unique_id']=='Close']
@@ -69,5 +71,6 @@ def predict_in_sample(filename):
         # Write new content to the file
         file.write(str(mae_score))
     return mae_score
+    
 
 

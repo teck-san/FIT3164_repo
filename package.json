@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "chart.js": "^4.4.0",
-    "el-transition": "^0.0.7"
+    "el-transition": "^0.0.7",
+    "papaparse": "^5.4.1"
   }
 }

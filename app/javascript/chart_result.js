@@ -1,181 +1,184 @@
 // Code using $ as usual goes here.
 
+
+
+
+async function getData() {
+  const xs = [];
+  console.log("before read");
+  const response = await fetch('../../../lib/nhits/Amazon.csv');
+  console.log("read");
+  const data = await response.text();
+  const table = data.split(/\n/).slice(1);
+  table.forEach(row => {
+    const columns = row.split(',');
+    const close = columns[4];
+    xs.push(close);
+  })
+  console.log(xs);
+}
+getData();
+console.log("data is here")
+
+function fetchTrueData() {
+  fetch('../../../lib/nhits/Amazon.csv') 
+  .then(response => response.text())
+  .then(data => {
+      const result = Papa.parse(data,{header:true,dynamicTyping:true});
+      const extractedData = results.data.map(row => row["Close"])
+      console.log(123)
+      console.log(extractedData)
+
+      return extractedData
+  })
+  .catch(error => {
+      console.error('There was a problem with fetching the CSV data:', error);
+  });
+    // Return an array of historical data points
+}
+x = fetchTrueData();
+console.log(1234)
+
 const ctx = document.getElementById('myChart');
+const data = fetchTrueData();
+const data2 = generatePredictedData();
+const totalDuration = 10000000;
+const delayBetweenPoints = totalDuration / data.length;
+const previousY = (ctx) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(100) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['y'], true).y;
+const animation = {
+  x: {
+    type: 'number',
+    easing: 'linear',
+    duration: delayBetweenPoints,
+    from: NaN, // the point is initially skipped
+    delay(ctx) {
+      if (ctx.type !== 'data' || ctx.xStarted) {
+        return 0;
+      }
+      ctx.xStarted = true;
+      return ctx.index * delayBetweenPoints;
+    }
+  },
+  y: {
+    type: 'number',
+    easing: 'linear',
+    duration: delayBetweenPoints,
+    from: previousY,
+    delay(ctx) {
+      if (ctx.type !== 'data' || ctx.yStarted) {
+        return 0;
+      }
+      ctx.yStarted = true;
+      return ctx.index * delayBetweenPoints;
+    }
+  }
+};
+
 
 let chart = new Chart(ctx, {
     type: 'line',
     data: {
-    labels: [2023-06-08    ,
-        2023-06-09    ,
-        2023-06-12   ,
-        2023-06-13   ,
-        2023-06-14    ,
-        2023-06-15   ,
-        2023-06-16   ,
-        2023-06-20    ,
-        2023-06-21   ,
-        2023-06-22    ,
-        2023-06-23   ,
-        2023-06-26   ,
-        2023-06-27    ,
-        2023-06-28    ,
-        2023-06-29    ,
-        2023-06-30    ,
-        2023-07-03    ,
-        2023-07-05   ,
-        2023-07-06    ,
-        2023-07-07    ,
-        2023-07-10    ,
-        2023-07-11    ,
-        2023-07-12   ,
-        2023-07-13    ,
-        2023-07-14    ,
-        2023-07-17    ,
-        2023-07-18    ,
-        2023-07-19    ,
-        2023-07-20    ,
-        2023-07-21   ,
-        2023-07-24    ,
-        2023-07-25    ,
-        2023-07-26   ,
-        2023-07-27    ,
-        2023-07-28    ,
-        2023-07-31    ,
-        2023-08-01    ,
-        2023-08-02   ,
-        2023-08-03   ,
-        2023-08-04    ,
-        2023-08-07   ,
-        2023-08-08    ,
-        2023-08-09   ,
-        2023-08-10    ,
-        2023-08-11    ,
-        2023-08-18    ,
-        2023-08-21    ,
-        2023-08-22    ,
-        2023-08-23    ,
-        2023-08-24    ,
-        2023-08-25    ,
-        2023-08-28    ,
-        2023-08-29   ,
-        2023-08-30    ],
+    labels: getLabels(),
     datasets: [
         {
             label: 'True Data',
-            data: fetchTrueData(), // True historical data
+            data: data, // True historical data
             borderColor: 'rgb(75, 192, 192)',
             fill: false,
         },
         {
             label: 'Predicted Data',
-            data: generatePredictedData(), // Predicted data
+            data: data2, // Predicted data
             borderColor: 'rgb(255, 99, 132)',
             fill: false,
         },
     ],
     },
     options: {
+        animation : animation,
+        interaction : {
+            intersect : false 
+        },
+        plugins:{
+            legend : false
+        },
+
         
     responsive: true,
-    animation: {
-        enabled: true,
-        duration: 5000, // Total duration of the animation in milliseconds
-        onProgress: function (animation){
-                chartInstance = this.chart
-                
-                for (let i = 0; i < data.length - 1; i++) {
-                    progress = animation.currentStep / animation.numSteps;
-                    nextDataPoint = data[i + 1];
-                    if (progress > (i + 1) / dataset.data.length) {
-                        nextDataPoint._noAnimation = true;
-                    }
-                }
-                this.update();
-
-        },
-        onComplete: () => {
-                for (let i = 0; i < data.length; i++) {
-                    data[i]._noAnimation = true;
-                }
-                this.update();
-        }
-    },
     
     scales: {
+        x: { type : 'linear'},
         y: {
         beginAtZero: true
         }
     }
     }
-});
+},);
 
-function fetchTrueData() {
-    // Replace with code to fetch real historical stock market data
-    lst =  [127.256406
-    ,   122.109906
-    ,132.864865
-    ,    129.117211
-   ,  133.203587
-    ,   128.343222
-   ,   129.550245
-    ,    125.474758
-   ,   129.621716
-    ,   131.157377
-    ,   131.803428
-    ,  127.751952
-   ,  128.844584
-    ,   125.359297
-    ,   128.846908
-    ,   124.514019
-    ,  134.149693
-   ,   134.869584
-    ,   129.986089
-    ,136.378181
-    ,   132.371143
-   ,   135.313979
-    ,   128.677479
-   ,    138.532054
-    ,   139.771107
-    ,    143.430751
-    ,    139.188143
-    ,   133.423347
-   ,    137.535511
-   ,    133.245155
-    ,    133.762600
-    ,   136.757103
-    ,  135.930141
-    ,   137.136040
-    ,  141.995828
-   ,   137.982518
-    ,   140.905124
-    ,    135.812698
-   ,   142.931090
-    ,   135.842875
-   ,   145.814392
-    ,   145.741524
-   ,   144.640508
-    ,   148.376256
- ,    146.302146
-    ,   146.034137
-   ,    145.783927
-    ,    143.473336
-    ,   140.411872
-   ,   147.381581
-    ,   143.574620
-    ,   137.501036
-   ,    145.442001
-   ,   143.292532
-    ,   147.198408
-   ,   139.539805
-   ,   146.266684
-   ,   143.722559]
-    return lst
-    // Return an array of historical data points
+
+
+
+
+function getLabels(){
+  lst = [2023-06-08    ,
+    2023-06-09    ,
+    2023-06-12   ,
+    2023-06-13   ,
+    2023-06-14    ,
+    2023-06-15   ,
+    2023-06-16   ,
+    2023-06-20    ,
+    2023-06-21   ,
+    2023-06-22    ,
+    2023-06-23   ,
+    2023-06-26   ,
+    2023-06-27    ,
+    2023-06-28    ,
+    2023-06-29    ,
+    2023-06-30    ,
+    2023-07-03    ,
+    2023-07-05   ,
+    2023-07-06    ,
+    2023-07-07    ,
+    2023-07-10    ,
+    2023-07-11    ,
+    2023-07-12   ,
+    2023-07-13    ,
+    2023-07-14    ,
+    2023-07-17    ,
+    2023-07-18    ,
+    2023-07-19    ,
+    2023-07-20    ,
+    2023-07-21   ,
+    2023-07-24    ,
+    2023-07-25    ,
+    2023-07-26   ,
+    2023-07-27    ,
+    2023-07-28    ,
+    2023-07-31    ,
+    2023-08-01    ,
+    2023-08-02   ,
+    2023-08-03   ,
+    2023-08-04    ,
+    2023-08-07   ,
+    2023-08-08    ,
+    2023-08-09   ,
+    2023-08-10    ,
+    2023-08-11    ,
+    2023-08-18    ,
+    2023-08-21    ,
+    2023-08-22    ,
+    2023-08-23    ,
+    2023-08-24    ,
+    2023-08-25    ,
+    2023-08-28    ,
+    2023-08-29   ,
+    2023-08-30    ]
+  return lst
 }
-
 // Function to generate predicted data based on animation progress
 function generatePredictedData(animationProgress) {
-    // Implement your forecasting model logic here
+    // Read csv file data to extract predicted value
     lst = [   124.250000
         ,  123.430000
         ,  126.570000
@@ -235,7 +238,6 @@ function generatePredictedData(animationProgress) {
        ,   134.910004
         ,  135.070007]
     return lst
-    // Generate predicted data based on animation progress
     // Return an array of predicted data points
 }
 
@@ -263,6 +265,8 @@ new Chart(ctx2, {
     }
     }
 });
+
+
 
 
 
