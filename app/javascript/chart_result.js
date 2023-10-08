@@ -1,27 +1,26 @@
 // Code using $ as usual goes here.
 
 
-
-
-async function getData() {
-  const xs = [];
-  console.log("before read");
-  const response = await fetch('../../../lib/nhits/Amazon.csv');
-  console.log("read");
-  const data = await response.text();
-  const table = data.split(/\n/).slice(1);
-  table.forEach(row => {
-    const columns = row.split(',');
-    const close = columns[4];
-    xs.push(close);
-  })
-  console.log(xs);
-}
-getData();
-console.log("data is here")
+async function fetchCloseValues() {
+  const response = await fetch("/Apple.csv");
+  const csvString = await response.text();
+      
+  const results = Papa.parse(csvString, { header: true });
+  const closeValues = results.data.map(row => row['Close']);
+      
+  return closeValues;
+  }
+  
+  // Usage
+fetchCloseValues().then(values => {
+    console.log(values);
+}).catch(error => {
+    console.error("Error fetching close values:", error);
+});
+  
 
 function fetchTrueData() {
-  fetch('../../../lib/nhits/Amazon.csv') 
+  fetch('/Amazon.csv') 
   .then(response => response.text())
   .then(data => {
       const result = Papa.parse(data,{header:true,dynamicTyping:true});
@@ -118,7 +117,7 @@ let chart = new Chart(ctx, {
 
 
 
-
+/*
 function getLabels(){
   lst = [2023-06-08    ,
     2023-06-09    ,
@@ -175,7 +174,7 @@ function getLabels(){
     2023-08-29   ,
     2023-08-30    ]
   return lst
-}
+}*/
 // Function to generate predicted data based on animation progress
 function generatePredictedData(animationProgress) {
     // Read csv file data to extract predicted value

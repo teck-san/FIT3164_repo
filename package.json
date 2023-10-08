@@ -1,7 +1,11 @@
 {
+  "type": "module",
   "dependencies": {
     "chart.js": "^4.4.0",
     "el-transition": "^0.0.7",
-    "papaparse": "^5.4.1"
+    "node-fetch": "^3.3.2",
+    "papaparse": "^5.4.1",
+    "readcsv": "^1.2.1",
+    "csvtojson":"^2.0.10"
   }
 }

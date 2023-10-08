@@ -28,14 +28,14 @@ class HomeController < ApplicationController
         @data_values = [0, 10, 5, 2, 20, 30, 45]
         
       
-        PyCall.sys.path.append('./lib/nhits')
+        PyCall.sys.path.append('./public/nhits')
         
 
         #@path = f
         app=PyCall.import_module("nhits")
        
        
-        @mae= app.predict_in_sample("./lib/nhits/Amazon.csv")
+        @mae= app.predict_in_sample("./public/nhits/Amazon.csv")
         @mae = @mae.round(2) 
         #print @mae
 
