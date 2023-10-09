@@ -8,4 +8,6 @@ Rails.application.routes.draw do
   get "home", to: "home#index"
   get "team", to: "team#index"
   get "performance", to: "performance#index"
+
+  post '/home_controller/send_visual', to: 'home_controller#index'
 end

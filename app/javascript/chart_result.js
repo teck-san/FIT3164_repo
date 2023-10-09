@@ -1,105 +1,127 @@
 // Code using $ as usual goes here.
 
-
-async function fetchCloseValues() {
-  const response = await fetch("/Apple.csv");
+const canvas = document.getElementById('myChart');
+const ctx = canvas.getContext('2d');
+async function fetchCloseValues(csvFilePath) {
+  const response = await fetch(csvFilePath);
   const csvString = await response.text();
-      
+    
   const results = Papa.parse(csvString, { header: true });
-  const closeValues = results.data.map(row => row['Close']);
-      
-  return closeValues;
-  }
-  
-  // Usage
-fetchCloseValues().then(values => {
-    console.log(values);
-}).catch(error => {
-    console.error("Error fetching close values:", error);
-});
-  
+  let closeValues = results.data.map(row => row['Close']);
+  let label = results.data.map(row=> row['Date']);
+  closeValues = closeValues.slice(-120).map(value=>parseFloat(value));
+  label = label.slice(-120);
 
-function fetchTrueData() {
-  fetch('/Amazon.csv') 
-  .then(response => response.text())
-  .then(data => {
-      const result = Papa.parse(data,{header:true,dynamicTyping:true});
-      const extractedData = results.data.map(row => row["Close"])
-      console.log(123)
-      console.log(extractedData)
-
-      return extractedData
-  })
-  .catch(error => {
-      console.error('There was a problem with fetching the CSV data:', error);
-  });
-    // Return an array of historical data points
+  return {label , closeValues};
 }
-x = fetchTrueData();
-console.log(1234)
 
-const ctx = document.getElementById('myChart');
-const data = fetchTrueData();
-const data2 = generatePredictedData();
-const totalDuration = 10000000;
-const delayBetweenPoints = totalDuration / data.length;
-const previousY = (ctx) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(100) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['y'], true).y;
-const animation = {
-  x: {
-    type: 'number',
-    easing: 'linear',
-    duration: delayBetweenPoints,
-    from: NaN, // the point is initially skipped
-    delay(ctx) {
-      if (ctx.type !== 'data' || ctx.xStarted) {
-        return 0;
+async function fetchPredictedValues(csvFilePath){
+  const response = await fetch(csvFilePath);
+  const csvString = await response.text();
+    
+  const results = Papa.parse(csvString, { header: true });
+  let predictValue = results.data.map(row => row['NHITS']).filter(value=> value !== undefined && value !== '');
+  predictValue = predictValue.map(value=>parseFloat(value));
+  let label = results.data.map(row=> row['ds']).filter(value=> value !== undefined && value !== '');
+
+
+  return {label ,predictValue};
+}
+
+async function combineDataAndLabel (){
+const [ amazon , prediction] = await Promise.all(
+  [
+    fetchCloseValues("/Amazon.csv"),
+    fetchPredictedValues("/prediction.csv")
+  ]);
+
+  const combinedData = amazon.closeValues.concat(prediction.predictValue);
+  const combinedLabels = amazon.label.concat(prediction.label);
+
+  return {combinedData,combinedLabels};
+}
+
+
+
+async function initialiseChart(){
+  const {combinedData,combinedLabels} = await combineDataAndLabel();
+  let gradient = ctx.createLinearGradient (0,0,canvas.clientWidth,0);
+  gradient.addColorStop(0,'green');
+  gradient.addColorStop(0.67,'green');
+  gradient.addColorStop(0.67,'red');
+  gradient.addColorStop(1,'red');
+  const totalDuration = 10000000;
+  const delayBetweenPoints = totalDuration / combinedData.length;
+  const previousY = (ctx) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(100) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['y'], true).y;
+  const animation = {
+    x: {
+      type: 'number',
+      easing: 'linear',
+      duration: delayBetweenPoints,
+      from: NaN, // the point is initially skipped
+      delay(ctx) {
+        if (ctx.type !== 'data' || ctx.xStarted) {
+          return 0;
       }
-      ctx.xStarted = true;
-      return ctx.index * delayBetweenPoints;
+        ctx.xStarted = true;
+        return ctx.index * delayBetweenPoints;
     }
   },
-  y: {
-    type: 'number',
-    easing: 'linear',
-    duration: delayBetweenPoints,
-    from: previousY,
-    delay(ctx) {
-      if (ctx.type !== 'data' || ctx.yStarted) {
-        return 0;
+    y: {
+      type: 'number',
+      easing: 'linear',
+      duration: delayBetweenPoints,
+      from: previousY,
+      delay(ctx) {
+        if (ctx.type !== 'data' || ctx.yStarted) {
+          return 0;
       }
-      ctx.yStarted = true;
-      return ctx.index * delayBetweenPoints;
+        ctx.yStarted = true;
+        return ctx.index * delayBetweenPoints;
     }
   }
-};
-
-
-let chart = new Chart(ctx, {
+  };
+  
+  new Chart(ctx, {
     type: 'line',
     data: {
-    labels: getLabels(),
+    labels: combinedLabels,
     datasets: [
         {
-            label: 'True Data',
-            data: data, // True historical data
-            borderColor: 'rgb(75, 192, 192)',
-            fill: false,
-        },
-        {
-            label: 'Predicted Data',
-            data: data2, // Predicted data
-            borderColor: 'rgb(255, 99, 132)',
+            label: 'Stock price',
+            data: combinedData, // True historical data
+            borderColor: gradient,
             fill: false,
         },
     ],
     },
     options: {
-        animation : animation,
+        animation : {
+          animation,
+          duration:2000,
+        },
         interaction : {
             intersect : false 
         },
         plugins:{
             legend : false
+        },
+
+      annotation:{
+        annotation : [{
+          type: 'line',
+          mode: 'vertical',
+          scaleID: 'x-axis-0',
+          value : combinedLabels[121],
+          borderColor: 'black',
+          borderWidth: 2,
+          label:{
+              content:'Predicted Data Start',
+              enabled : true,
+              position: 'top'
+            }
+          }]
+
         },
 
         
@@ -113,132 +135,13 @@ let chart = new Chart(ctx, {
     }
     }
 },);
-
-
-
-
-/*
-function getLabels(){
-  lst = [2023-06-08    ,
-    2023-06-09    ,
-    2023-06-12   ,
-    2023-06-13   ,
-    2023-06-14    ,
-    2023-06-15   ,
-    2023-06-16   ,
-    2023-06-20    ,
-    2023-06-21   ,
-    2023-06-22    ,
-    2023-06-23   ,
-    2023-06-26   ,
-    2023-06-27    ,
-    2023-06-28    ,
-    2023-06-29    ,
-    2023-06-30    ,
-    2023-07-03    ,
-    2023-07-05   ,
-    2023-07-06    ,
-    2023-07-07    ,
-    2023-07-10    ,
-    2023-07-11    ,
-    2023-07-12   ,
-    2023-07-13    ,
-    2023-07-14    ,
-    2023-07-17    ,
-    2023-07-18    ,
-    2023-07-19    ,
-    2023-07-20    ,
-    2023-07-21   ,
-    2023-07-24    ,
-    2023-07-25    ,
-    2023-07-26   ,
-    2023-07-27    ,
-    2023-07-28    ,
-    2023-07-31    ,
-    2023-08-01    ,
-    2023-08-02   ,
-    2023-08-03   ,
-    2023-08-04    ,
-    2023-08-07   ,
-    2023-08-08    ,
-    2023-08-09   ,
-    2023-08-10    ,
-    2023-08-11    ,
-    2023-08-18    ,
-    2023-08-21    ,
-    2023-08-22    ,
-    2023-08-23    ,
-    2023-08-24    ,
-    2023-08-25    ,
-    2023-08-28    ,
-    2023-08-29   ,
-    2023-08-30    ]
-  return lst
-}*/
-// Function to generate predicted data based on animation progress
-function generatePredictedData(animationProgress) {
-    // Read csv file data to extract predicted value
-    lst = [   124.250000
-        ,  123.430000
-        ,  126.570000
-       ,   126.660004
-       ,   126.419998
-       ,   127.110001
-        ,   125.489998
-       ,   125.779999
-       ,   124.830002
-        ,   130.149994
-        ,    129.330002
-       ,   127.330002
-       ,   129.179993
-       ,   129.039993
-        ,   127.900002
-       ,  130.360001
-       ,  130.220001
-       ,   130.380005
-       ,  128.360001
-       ,   129.779999
-       ,  127.129997
-       ,   128.779999
-       ,   130.800003
-       ,   134.300003
-     ,   134.679993
-       ,  133.559998
-       ,   132.830002
-       , 135.360001
-      ,   129.960007
-       ,   130.000000
-       ,   128.800003
-       ,   129.130005
-        ,   128.149994
-      ,  128.250000
-      ,   132.210007
-       ,   133.679993
-       ,   131.690002
-        ,  128.210007
-      ,   128.910004
-       ,   139.570007
-       ,   142.220001
-       ,   139.940002
-        ,   137.850006
-      ,   138.559998
-       ,   138.410004
-       ,   140.570007
-       ,  137.669998
-      ,   135.070007
-        ,  133.979996
-        ,  133.220001
-        ,   134.679993
-        ,   134.250000
-       ,   135.520004
-     ,   131.839996
-        ,   133.259995
-        ,   133.139999
-       ,   134.910004
-        ,  135.070007]
-    return lst
-    // Return an array of predicted data points
+  
+  
 }
+
+initialiseChart();
+
+
 
 
 

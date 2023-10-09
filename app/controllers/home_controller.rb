@@ -26,17 +26,16 @@ class HomeController < ApplicationController
               'June',
             ]
         @data_values = [0, 10, 5, 2, 20, 30, 45]
-        
+        @para = params[:visual]
       
-        PyCall.sys.path.append('./public/nhits')
-        
-
+       #PyCall.sys.path.append('./public/nhits')
+    
         #@path = f
-        app=PyCall.import_module("nhits")
+        #app=PyCall.import_module("nhits")
        
        
-        @mae= app.predict_in_sample("./public/nhits/Amazon.csv")
-        @mae = @mae.round(2) 
+        #@mae= app.predict_in_sample("./public/nhits/Amazon.csv")
+        #@mae = @mae.round(2) 
         #print @mae
 
         

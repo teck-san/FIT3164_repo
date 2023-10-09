@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="/dist/output.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
-  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/0.5.7/chartjs-plugin-annotation.min.js"></script>
+
   
 </head>
 <body>
@@ -35,9 +37,15 @@
       <div class="dropdown">
         <button onclick="myFunction()" class="dropbtn inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">Dropdown</button>
         <div id="myDropdown" class="dropdown-content">
-          <button onclick="showChart('first')" class = "first" >Homeee</button>
-          <button onclick="showChart('second')" class = "second" >About</a>
-          <button onclick="showChart('third')" class = "third" >Contact</a>
+
+          <form action="/controller_name/action_name" method="post">
+            <input type="button" name="first" onclick="showChart('first')" class = "first" value="Button 1">
+            <input type="button" name="second" value="Button 2">
+          </form>
+
+          <button  >Homeee</button>
+          <button onclick="showChart('second')" class = "second" name="visual" >About</a>
+          <button onclick="showChart('third')" class = "third" name="visual">Contact</a>
         </div>
       </div>
   </div>
@@ -50,7 +58,8 @@
         <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Mean Absolute Error</h1>
         <div class="forecasted-price-in">
          
-            <p id="forecast"><%= @mae %></p>
+          <!-- <p id="forecast"><%= @mae %></p> -->
+          <h1 id="x"><%= @para %></h1> 
         </div>
         
 
