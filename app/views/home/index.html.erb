@@ -13,6 +13,7 @@
 <body>
   <div class = "container">
     <div class="section_all section_1">
+    <h1 id = "vis-title" class=" text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl"></h1>
       <div class="graph_result">
           <div class="graph_result_1">
             <div class="graph_result_2">
@@ -32,20 +33,51 @@
                 <canvas id="myChart3"  style="width: 500px; height: 250px;" data-labels="<%= @data_keys %>" data-data="<%= @data_values %>" ></canvas>
               </div>
 
+              <div id= "chart-container-4" >
+                <canvas id="myChart4"  style="width: 500px; height: 250px;" data-labels="<%= @data_keys %>" data-data="<%= @data_values %>" ></canvas>
+              </div>
+
+              <div id= "chart-container-5" >
+                <canvas id="myChart5"  style="width: 500px; height: 250px;" data-labels="<%= @data_keys %>" data-data="<%= @data_values %>" ></canvas>
+              </div>
+
             </div>
 
-      <div class="dropdown">
-        <button onclick="myFunction()" class="dropbtn inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">Dropdown</button>
-        <div id="myDropdown" class="dropdown-content">
+      <div class="left-side">
+        <div class="dropdown">
+          <button onclick="myFunction()" class="dropbtn inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">Dropdown</button>
+          <div id="myDropdown" class="dropdown-content">
 
-          <form action="/controller_name/action_name" method="post">
-            <input type="button" name="first" onclick="showChart('first')" class = "first" value="Button 1">
-            <input type="button" name="second" value="Button 2">
-          </form>
+            <!--
+            <%= button_to "Amazon", button1_path, method: :get %>
+            <%= button_to "Apple", button2_path, method: :get %>
+            <%= button_to "Dis", button3_path, method: :get %>
+            -->
 
-          <button  >Homeee</button>
-          <button onclick="showChart('second')" class = "second" name="visual" >About</a>
-          <button onclick="showChart('third')" class = "third" name="visual">Contact</a>
+            <button id='first' class = "first">Amazon</button>
+            <button id='second' class = "second" >Apple</a>
+            <button id='third' class = "third">Nvidia</a>
+            <button id='forth' class = "third">Disney</a>
+            <button id='fifth' class = "third">Walmart</a>
+          </div>
+        </div>
+
+        <div class = "slope-chart">
+          <div id ="chart-container-6">
+            <canvas id="myChart6"  style="width: 500px; height: 250px;" data-labels="<%= @data_keys %>" data-data="<%= @data_values %>" ></canvas>
+          </div>
+
+          <div class = "slope-text">
+            <h3>Amazon</h3>
+          </div>
+
+          <div class="slope-performance">
+            <p>performance</p>
+            <p>performance</p>
+            <p>performance</p>
+
+          </div>
+
         </div>
       </div>
   </div>
@@ -58,7 +90,7 @@
         <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Mean Absolute Error</h1>
         <div class="forecasted-price-in">
          
-          <!-- <p id="forecast"><%= @mae %></p> -->
+          <p id="forecast"></p>
           <h1 id="x"><%= @para %></h1> 
         </div>
         

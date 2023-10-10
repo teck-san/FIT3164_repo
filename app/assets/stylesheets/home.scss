@@ -47,6 +47,18 @@
                     width: 100%;
                 
                 }
+                #chart-container-4{
+                    display: none;
+                    position: relative;
+                    width: 100%;
+                
+                }
+                #chart-container-5{
+                    display: none;
+                    position: relative;
+                    width: 100%;
+                
+                }
         }
     }
 
@@ -69,7 +81,30 @@
     }
 }
 
+.left-side{
+    display: flex;
+    flex-direction: column;
 
+    .slope-chart{
+        #chart-container-6{
+            display: inline-block;
+            position: relative;
+            width: 100%;
+        
+        }
+    }
+
+    .slope-performance{
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+    }
+
+    .slope-text{
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+}
 
 .dropbtn {
     background-color: #34c8db;

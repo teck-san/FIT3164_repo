@@ -53,7 +53,7 @@ def preprocess_data(df,scaling=True):
 
 
 
-def predict_in_sample(filename):
+def predict_in_sample(filename,output):
     df=read_csv(filename)
     input_data=df[-180:-60]
     input_data,scale=preprocess_data(input_data)
@@ -66,10 +66,11 @@ def predict_in_sample(filename):
     close_prediction['NHITS'] = close_prediction['NHITS'].apply(lambda y: descale_value(y, scale))
     merged = test_data.merge(close_prediction, how='inner', on=['ds'])
     mae_score  =mae(merged['NHITS'], merged['y'])
-    close_prediction.to_csv('public/prediction.csv', index=False)
-    with open('public/mae.txt', 'w') as file:
+    close_prediction.to_csv('public/prediction'+output+'.csv', index=False)
+    with open('public/mae'+output+'.txt', 'w') as file:
         # Write new content to the file
         file.write(str(mae_score))
+    torch.cuda.empty_cache()
     return mae_score
     
 

@@ -10,4 +10,10 @@ Rails.application.routes.draw do
   get "performance", to: "performance#index"
 
   post '/home_controller/send_visual', to: 'home_controller#index'
+
+  
+  get 'button1', to: 'home#index', as: 'button1'
+  get 'button2', to: 'home#index', as: 'button2'
+  get 'button3', to: 'home#index', as: 'button3'
+
 end
