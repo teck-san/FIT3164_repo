@@ -1,16 +1,8 @@
 // Code using $ as usual goes here.
 
-const canvas = document.getElementById('myChart');
-const canvas2 = document.getElementById('myChart2');
-const canvas3 = document.getElementById('myChart3');
-const canvas4 = document.getElementById('myChart4');
-const canvas5 = document.getElementById('myChart5');
 
-const ctx = canvas.getContext('2d');
-const ctx2 = canvas2.getContext('2d');
-const ctx3 = canvas3.getContext('2d');
-const ctx4 = canvas4.getContext('2d');
-const ctx5 = canvas5.getContext('2d');
+
+
 
 
 async function fetchCloseValues(csvFilePath) {
@@ -26,7 +18,6 @@ async function fetchCloseValues(csvFilePath) {
   return {label , closeValues};
 }
 
-let predictNumber = 0
 async function fetchPredictedValues(csvFilePath){
   const response = await fetch(csvFilePath);
   const csvString = await response.text();
@@ -35,7 +26,6 @@ async function fetchPredictedValues(csvFilePath){
   let predictValue = results.data.map(row => row['NHITS']).filter(value=> value !== undefined && value !== '');
   predictValue = predictValue.map(value=>parseFloat(value));
   let label = results.data.map(row=> row['ds']).filter(value=> value !== undefined && value !== '');
-  predictNumber = predictValue.length;
 
   return {label ,predictValue};
 }
@@ -54,13 +44,40 @@ const [ amazon , prediction] = await Promise.all(
 }
 
 
-async function initialiseChart(id_name,inputCSVFilePath,outputCSVFilePath){
+
+async function initialiseChart(id_name,id_name2,inputCSVFilePath,outputCSVFilePath){
+  
   const {combinedData,combinedLabels} = await combineDataAndLabel(inputCSVFilePath,outputCSVFilePath);
+  let canvas = document.getElementById(id_name);
+  let ctx = canvas.getContext('2d');
+  let canvas2 = document.getElementById(id_name2);
+  let ctx2 = canvas2.getContext('2d');
+  document.getElementById("perform-start").innerHTML = "Start Date: "+combinedLabels[combinedLabels.length-60] ;  
+  document.getElementById("perform-end").innerHTML = "End Date: "+combinedLabels[combinedLabels.length-1];  
+  document.getElementById("perform-start-price" ).innerHTML = "$ "+Math.round(combinedData[combinedData.length-60]*100)/100;  
+  document.getElementById("perform-end-price").innerHTML = "$ "+Math.round(combinedData[combinedData.length-1]*100)/100; 
+  
+  // set the percentage css if value <0 the box is red else is green
+  var val = Math.round((((combinedData[combinedData.length-1]/combinedData[combinedData.length-60])-1 )*100)*100)/100
+  var percent_space = document.getElementById("perform-percent");
+  percent_space.style.padding="2rem";
+  percent_space.style.borderRadius="1rem";
+  if (val<0) {
+    
+    percent_space.style.backgroundColor="red";
+    w_msg = "Loss: "
+    
+  } else {
+    percent_space.style.backgroundColor="lightgreen";
+    w_msg = "Gained: "
+  }  
+  
+  document.getElementById("perform-percent").innerHTML = w_msg + Math.round((((combinedData[combinedData.length-1]/combinedData[combinedData.length-60])-1 )*100)*100)/100+"%";  
   let gradient = ctx.createLinearGradient (0,0,canvas.clientWidth,0);
-  gradient.addColorStop(0,'green');
-  gradient.addColorStop(0.68,'green');
-  gradient.addColorStop(0.68,'red');
-  gradient.addColorStop(1,'red');
+  gradient.addColorStop(0,'black');
+  gradient.addColorStop(0.68,'black');
+  gradient.addColorStop(0.68,'blue');
+  gradient.addColorStop(1,'blue');
   const totalDuration = 10000000;
   const delayBetweenPoints = totalDuration / combinedData.length;
   const previousY = (ctx) => ctx.index === 0 ? ctx.chart.scales.y.getPixelForValue(100) : ctx.chart.getDatasetMeta(ctx.datasetIndex).data[ctx.index - 1].getProps(['y'], true).y;
@@ -92,8 +109,63 @@ async function initialiseChart(id_name,inputCSVFilePath,outputCSVFilePath){
     }
   }
   };
+
   
-  new Chart(id_name, {
+  return new Promise((resolve) => {new Chart (ctx2,{
+    type: 'line',
+    data: {
+      labels : [combinedLabels[combinedLabels.length-60],combinedLabels[combinedLabels.length-1]],
+      datasets: [
+        {
+            label: 'Stock price',
+            data: [combinedData[combinedData.length-60],combinedData[combinedData.length-1]], // True historical data
+            borderColor: 'black',
+            fill: false,
+            pointBackgroundColor : ['black','blue'],
+            pointRadius : 5,
+            pointHoverRadius: 7,
+        },
+    ],
+  
+    
+    },
+    options:{
+      
+      legend: {display : false},
+      scales : {
+        yAxes : [{
+          gridLines : {
+            display : false
+          }
+        }]
+      },
+      annotation : {
+        annotations : [ {
+          type : 'line',
+          mode: 'vertical',
+          scaleID: 'x-axis-0',
+          value : combinedLabels[combinedLabels.length-1],
+          borderColor : 'black',
+          label : {
+            backgroundColor: 'rgba(255, 0, 0, 0.3)',
+            content: 'Predicted price: ' + combinedData[combinedData.length-1],
+            enabled: true,
+            position: 'left',
+            xAdjust: -32,
+            yAdjust: -40,
+            font :{
+              size : 20
+            }
+          }
+        }]
+      }
+
+    },
+    
+  })
+
+
+  new Chart(ctx, {
     type: 'line',
     data: {
     labels: combinedLabels,
@@ -112,7 +184,7 @@ async function initialiseChart(id_name,inputCSVFilePath,outputCSVFilePath){
           type : 'line',
           mode: 'vertical',
                 scaleID: 'x-axis-0', 
-                value: combinedLabels[combinedData.length-predictNumber], 
+                value: combinedLabels[combinedData.length-60], 
                 borderColor: 'black',
                 borderWidth: 2,
                 label: {
@@ -125,6 +197,7 @@ async function initialiseChart(id_name,inputCSVFilePath,outputCSVFilePath){
         animation : {
           animation,
           duration:2000,
+          onComplete:() => resolve()
         },
         interaction : {
             intersect : false 
@@ -138,22 +211,72 @@ async function initialiseChart(id_name,inputCSVFilePath,outputCSVFilePath){
     responsive: true,
     
     scales: {
+        xAxes : [{
+          gridLines:{color:"rgba(0,0,0,0)"},
+        }],
+        
         x: { type : 'linear'},
         y: {
         beginAtZero: true
         }
     }
-    }
-},);
-  
-  
-}
+    }})}
 
-initialiseChart(ctx,"/AMZN.csv","/predictionAMZN.csv");
-initialiseChart(ctx2,"/AAPL.csv","/predictionAAPL.csv");
-initialiseChart(ctx3,"/NVDA.csv","/predictionNVDA.csv");
-initialiseChart(ctx4,"/DIS.csv","/predictionDIS.csv");
-initialiseChart(ctx5,"/WMT.csv","/predictionWMT.csv");
+  
+  )
+  
+
+
+
+  
+};
+
+//window.onload = function() {
+//alert("byebye")
+//}
+//function myFunction(){
+//  initialiseChart("myChart","myChart6", "/AMZN.csv","/predictionAMZN.csv");
+//  alert("HIHI")
+//}
+
+
+
+
+document.getElementById("first").addEventListener("click", async function(event) {
+  event.preventDefault();
+  await initialiseChart("myChart","myChart6", "/Amazon.csv","/predictionAmazon.csv");
+  
+  
+  
+
+       
+  
+});
+
+document.getElementById("second").addEventListener("click", async function(event) {
+  event.preventDefault();
+  await initialiseChart("myChart2","myChart7","/AAPL.csv","/predictionAAPL.csv");
+  
+ 
+});
+
+document.getElementById("third").addEventListener("click", async function(event) {
+  event.preventDefault();
+  await initialiseChart("myChart3","myChart8","/NVDA.csv","/predictionNVDA.csv");
+  
+});
+
+document.getElementById("forth").addEventListener("click", async function(event) {
+  event.preventDefault();
+  
+  await initialiseChart("myChart4","myChart9","/DIS.csv","/predictionDIS.csv");
+});
+
+document.getElementById("fifth").addEventListener("click", async function(event) {
+  event.preventDefault();
+  await initialiseChart("myChart5","myChart10","/WMT.csv","/predictionWMT.csv");
+ 
+});
 
 
 

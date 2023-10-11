@@ -1,4 +1,76 @@
-<div>
-  <h1 class="font-bold text-4xl">Performance#performance</h1>
-  <p>Find me in app/views/performance/performance.html.erb</p>
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/dist/output.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/0.5.7/chartjs-plugin-annotation.min.js"></script>
+
+  
+</head>
+<body onload="myFunction2()">
+<div class = "page">
+  <div class = "performance-page">
+    <div class="section_all section_1">
+    
+      <div id= "chart-perform1">
+        <canvas id="performance-chart1"  style="width: 1000px; height: 500px; " data-labels="<%= @data_keys %>" data-data="<%= @data_values %>" ></canvas>
+      </div>
+
+      <div id= "chart-perform2">
+        <canvas id="performance-chart2"  style="width: 1000px; height: 500px;" data-labels="<%= @data_keys %>" data-data="<%= @data_values %>" ></canvas>
+      </div>
+      <div id= "chart-perform3">
+        <canvas id="performance-chart3"  style="width: 1000px; height: 500px;" data-labels="<%= @data_keys %>" data-data="<%= @data_values %>" ></canvas>
+      </div>
+      <div id= "chart-perform4">
+        <canvas id="performance-chart4"  style="width: 1000px; height: 500px;" data-labels="<%= @data_keys %>" data-data="<%= @data_values %>" ></canvas>
+      </div>
+      <div id= "chart-perform5">
+        <canvas id="performance-chart5"  style="width: 1000px; height: 500px;" data-labels="<%= @data_keys %>" data-data="<%= @data_values %>" ></canvas>
+      </div>
+
+    </div>
+
+    <div class ="section_all section_2" style="margin-top: 2rem;">
+      <div class="measurements">
+        <div class="forecasted-price">
+          <h1 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Mean Absolute Error</h1>
+            <div class="forecasted-price-in">
+            
+              <p id="forecast"></p>
+            </div>
+            
+
+        </div>
+      
+      
+
+      </div>
+
+
+
+    </div>
+
+    <div class="dropdown">
+      <button id = "drop-btn-p"  class="dropbtn inline-block rounded bg-primary px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]" data-te-ripple-init data-te-ripple-color="light">Performance</button>
+      <div id="myDropdown-p" class="dropdown-content">
+
+        <button id='first-p' class = "first">Amazon</button>
+        <button id='second-p' class = "second" >Apple</a>
+        <button id='third-p' class = "third">Nvidia</a>
+        <button id='forth-p' class = "third">Disney</a>
+        <button id='fifth-p' class = "third">Walmart</a>
+      </div>
+    </div>
+  </div>
 </div>
+
+
+
+<%= javascript_include_tag('performance_result.js') %>
+
+</body>
+<html>
