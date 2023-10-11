@@ -31,6 +31,7 @@ gem "jbuilder"
 # chart js
 gem 'chart-js-rails'
 
+gem "tailwindcss-rails", "~> 2.0"
 
 
 # Use Redis adapter to run Action Cable in production
@@ -53,6 +54,8 @@ gem "sassc-rails"
 
 # python gem
 gem 'pycall'
+
+
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
@@ -80,4 +83,4 @@ group :test do
 
 end
 
-gem "tailwindcss-rails", "~> 2.0"
+
