@@ -1,7 +1,7 @@
 
-require 'pycall/import'
+#require 'pycall/import'
 
-include PyCall::Import
+#include PyCall::Import
 
 
   
@@ -39,9 +39,9 @@ class HomeController < ApplicationController
 
 
         
-        pyimport :math
+        #pyimport :math
 
-        puts "xxxx"+request.path
+       # puts "xxxx"+request.path
         if request.path == "/button1"
             #include Nhits_model
             #@mae=math.degrees(math.pi / 2)
@@ -79,7 +79,7 @@ class HomeController < ApplicationController
         #@mae = @mae.round(2) 
         #print @mae
 
-        puts "hehre"+button1_path+" "+button2_path
+       # puts "hehre"+button1_path+" "+button2_path
         
         
     end
