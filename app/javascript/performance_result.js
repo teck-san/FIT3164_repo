@@ -100,7 +100,7 @@ document.getElementById("performance-page").addEventListener("click", function(e
            .catch((e) => console.error(e))
        );
 
-       alert("hello world")
+
 });
 
    
