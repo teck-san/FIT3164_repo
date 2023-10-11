@@ -135,7 +135,7 @@ document.getElementById("forth").addEventListener("click", function(event) {
         char9.style.height="200px";
 
   
-  document.getElementById("vis-title").innerHTML = "Disney"; 
+  document.getElementById("vis-title").innerHTML = "Google"; 
 });
 
 document.getElementById("fifth").addEventListener("click", function(event) {

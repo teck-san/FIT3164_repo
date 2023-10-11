@@ -88,7 +88,7 @@ window.onclick = function(event) {
 });
 document.getElementById("performance-page").addEventListener("click", function(event) {
      //set mae file path
-     txt_path = ["maeAMZN.txt","maeAAPL.txt","maeNVDA.txt","maeDIS.txt","maeWMT.txt"]
+     txt_path = ["maeAmazon.txt","maeAAPL.txt","maeNVDA.txt","maeGOOG.txt","maeWMT.txt"]
      mae_result = []
      
      const fetchPromises = txt_path.map(path =>
@@ -151,7 +151,7 @@ document.getElementById("third-p").addEventListener("click", function(event) {
 
 document.getElementById("forth-p").addEventListener("click", function(event) {
   event.preventDefault();
-  initialisePerformance("performance-chart4","/DIS.csv","/predictionDIS.csv");
+  initialisePerformance("performance-chart4","/GOOG.csv","/predictionGOOG.csv");
   
   document.getElementById("chart-perform1").style.display="none";
     document.getElementById("chart-perform2").style.display="none";

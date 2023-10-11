@@ -269,7 +269,7 @@ document.getElementById("third").addEventListener("click", async function(event)
 document.getElementById("forth").addEventListener("click", async function(event) {
   event.preventDefault();
   
-  await initialiseChart("myChart4","myChart9","/DIS.csv","/predictionDIS.csv");
+  await initialiseChart("myChart4","myChart9","/GOOG.csv","/predictionGOOG.csv");
 });
 
 document.getElementById("fifth").addEventListener("click", async function(event) {

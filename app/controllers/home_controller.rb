@@ -29,7 +29,7 @@ class HomeController < ApplicationController
         #PyCall.sys.path.append('./public/nhits')
 
         #app=PyCall.import_module("nhits")
-        #mae= app.predict_in_sample("./public/Amazon.csv","Amazon")
+        #mae= app.predict_in_sample("./public/GOOG.csv","GOOG")
         #mae = mae.round(2) 
         #mae= app.predict_in_sample("./public/AAPL.csv","AAPL")
         #mae = mae.round(2)
