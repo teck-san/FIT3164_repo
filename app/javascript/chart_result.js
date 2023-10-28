@@ -1,15 +1,19 @@
 // Code using $ as usual goes here.
 
-
-
-
-
-
 async function fetchCloseValues(csvFilePath) {
   const response = await fetch(csvFilePath);
+
+  //Check if the response is status is not ok
+  if (!response.ok) {
+    throw new Error(`Failed to fetch CSV file from ${csvFilePath}. Status: ${response.status} ${response.statusText}`);
+  }
   const csvString = await response.text();
     
   const results = Papa.parse(csvString, { header: true });
+
+  if (results.data.length < 180) {
+    throw new Error(`The CSV file at ${csvFilePath} contains fewer than 180 data points. Found: ${results.data.length} data points.`);
+  }
   let closeValues = results.data.map(row => row['Close']);
   let label = results.data.map(row=> row['Date']);
   closeValues = closeValues.slice(-180,-60).map(value=>parseFloat(value));
@@ -18,8 +22,14 @@ async function fetchCloseValues(csvFilePath) {
   return {label , closeValues};
 }
 
+
+
 async function fetchPredictedValues(csvFilePath){
   const response = await fetch(csvFilePath);
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch CSV file from ${csvFilePath}. Status: ${response.status} ${response.statusText}`);
+  }
   const csvString = await response.text();
     
   const results = Papa.parse(csvString, { header: true });
@@ -29,6 +39,8 @@ async function fetchPredictedValues(csvFilePath){
 
   return {label ,predictValue};
 }
+
+
 
 async function combineDataAndLabel (inputCSVFilePath,outputCSVFilePath){
 const [ amazon , prediction] = await Promise.all(
@@ -239,12 +251,15 @@ async function initialiseChart(id_name,id_name2,inputCSVFilePath,outputCSVFilePa
 //  alert("HIHI")
 //}
 
-
+function myFunction() {
+  
+  initialiseChart("myChart","myChart6", "/Amazon.csv","/predictionAmazon.csv");
+  document.getElementById("vis-title").innerHTML = "Amazon"; 
+}
 
 
 document.getElementById("first").addEventListener("click", async function(event) {
-  event.preventDefault();
-  await initialiseChart("myChart","myChart6", "/Amazon.csv","/predictionAmazon.csv");
+ 
   
   
   

@@ -54,12 +54,29 @@ def preprocess_data(df,scaling=True):
 
 
 def predict_in_sample(filename,output):
-    df=read_csv(filename)
+    try:
+        df = pd.read_csv(filename)
+    except FileNotFoundError:
+        print("File not found.")
+        return
+    except pd.errors.EmptyDataError:
+        print("No data")
+        return
+    except pd.errors.ParserError:
+        print("Parse error")
+        return
+    except Exception:
+        print("Some other exception")
+        return
+    if(len(df)<180):
+        print("Data length cannot be smaller than 180")
+        return
     input_data=df[-180:-60]
     input_data,scale=preprocess_data(input_data)
     test_data=df[-60:]
     test_data,test_scale=preprocess_data(test_data,False)
     nhits_model = NeuralForecast.load(path='./lib//nhits/model/')
+    print("Predicting on "+output)
     prediction=nhits_model.predict(df=input_data).reset_index()
     close_prediction=prediction[prediction['unique_id']=='Close']
     test_data=test_data[test_data['unique_id']=='Close']
@@ -71,7 +88,9 @@ def predict_in_sample(filename,output):
         # Write new content to the file
         file.write(str(mae_score))
     torch.cuda.empty_cache()
+    print("Prediction done !")
     return mae_score
     
-
+#predict_in_sample('./public/invalid.csv','GOOGtest')
+predict_in_sample('./public/Amazon_test.csv','GOOGtest')
 

@@ -1,7 +1,7 @@
 body {background-color: rgb(245, 245, 245);}
 
 .page{
-    margin: 2rem;;
+    margin: 2rem 10%;
 }
 
 .container{
@@ -22,19 +22,38 @@ body {background-color: rgb(245, 245, 245);}
 }
 
 .section_1{
+
+    #vis-title{
+        background-color: black;
+        color: white;
+        width: 25%;
+        border-radius: 1rem 1rem 0 0;
+        padding: 1rem;
+
+    }
     .graph_result{
         display: flex;
         justify-content: space-between;
+        
+       
 
         .graph_result_1{
             
                 display: flex;
                 width: 100%;
                 justify-content: space-evenly;
+        
+                flex-direction: column;
+                gap:5rem;
+ 
 
                 .graph_result_2{
                     display: flex;
                     flex-direction: column;
+                    border-radius: 0rem 1rem 1rem 1rem ;
+                    padding: 2rem;
+                    background-color: #ddd;
+                    
                 #chart-container-1{
                     display: inline-block;
                     position: relative;
@@ -72,7 +91,7 @@ body {background-color: rgb(245, 245, 245);}
     }
 }
 
-.section_2{
+
 
     .measurements{
         display: flex;
@@ -86,21 +105,24 @@ body {background-color: rgb(245, 245, 245);}
             text-align: center;
         }
     }
-}
 
-.prediction-summ{
-    margin-left: 2rem;;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+
+
     .left-side{
         display: flex;
         gap: 5rem;
+ 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 0rem 1rem 1rem 1rem ;
         
         
 
         .slope-chart{
+            width: 60%;
             #chart-container-6{
                 display: inline-block;
                 position: relative;
@@ -135,8 +157,10 @@ body {background-color: rgb(245, 245, 245);}
 
         .slope-performance{
             display: flex;
+            flex-direction: column;
             justify-content: space-evenly;
             align-items: center;
+            width: 40%;
         }
 
         .slope-text{
@@ -145,10 +169,8 @@ body {background-color: rgb(245, 245, 245);}
         }
     }
 
-    .section_all{ section_2{
-        justify-self: flex-end;
-    }}
-}
+
+
 
 .dropbtn {
     background-color: #34c8db;
@@ -190,3 +212,18 @@ body {background-color: rgb(245, 245, 245);}
   .dropdown-content button:hover {background-color: #ddd; width: 100%;}
   
   .show {display: block;}
+
+
+  .sec-2{
+    .sec-2-title{
+        background-color: black;
+        
+        width: 35%;
+        border-radius: 1rem 1rem 0 0;
+        padding: 1rem;
+
+        h1{
+            color: white;
+        }
+    }
+  }
