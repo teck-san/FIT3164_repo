@@ -10,7 +10,8 @@ import pandas as pd
 import torch
 import os
 import sys
-
+import requests
+from io import StringIO
 
 def read_csv(filename):
     df=pd.read_csv(filename)
@@ -72,6 +73,26 @@ def predict_in_sample(filename):
         file.write(str(mae_score))
     torch.cuda.empty_cache()
     return mae_score
+
+API_URL = "https://www.alphavantage.co/query"
+API_KEY = "DI7FD31577NVN94J"
+SYMBOL = "AAPL"
+
+data = {
+    "function" : "TIME_SERIES_DAILY",
+    "symbol" : SYMBOL,
+    "apikey" : API_KEY,
+    "outputsize" : "full",
+    "datatype" : "csv"
+
+}
+
+response = requests.get(API_URL,params= data)
+print(response)
+stock_data = pd.read_csv(StringIO(response.content.decode('utf-8')))
+print(stock_data)
+close_price = stock_data['timestamp']
+print(close_price)
     
 
 

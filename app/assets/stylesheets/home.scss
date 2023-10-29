@@ -1,5 +1,23 @@
 body {background-color: rgb(245, 245, 245);}
 
+.main-title{
+    
+    
+    background-image: url("background.jpg");
+    padding: 5rem;
+    background-size: 25%;
+    display: flex;
+    justify-content: center;
+
+
+    h1{
+        color: white;
+        background-color: black;
+        border-radius: 2rem;
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}
 .page{
     margin: 2rem 10%;
 }
@@ -58,6 +76,7 @@ body {background-color: rgb(245, 245, 245);}
                     display: inline-block;
                     position: relative;
                     width: 100%;
+
                 
                 }
                 #chart-container-2{

@@ -86,40 +86,77 @@ window.onclick = function(event) {
     document.getElementById("myDropdown-p").classList.toggle("show");
 
 });
-document.getElementById("performance-page").addEventListener("click", function(event) {
+//document.getElementById("performance-page").addEventListener("click", function(event) {
      //set mae file path
-     txt_path = ["maeAmazon.txt","maeAAPL.txt","maeNVDA.txt","maeGOOG.txt","maeWMT.txt"]
-     mae_result = []
+     //txt_path = ["maeAmazon.txt","maeAAPL.txt","maeNVDA.txt","maeGOOG.txt","maeWMT.txt"]
+     //mae_result = []
      
-     const fetchPromises = txt_path.map(path =>
-         fetch(path)
-           .then((res) => res.text())
-           .then((text) => {
-             mae_result.push(Number(text).toFixed(2));
-           })
-           .catch((e) => console.error(e))
-       );
+     //const fetchPromises = txt_path.map(path =>
+         //fetch(path)
+           //.then((res) => res.text())
+           //.then((text) => {
+           //  mae_result.push(Number(text).toFixed(2));
+          // )
+           //.catch((e) => console.error(e))
+      // );
 
 
-});
+//});
 
-   
-    
-    
+//document.addEventListener('turbolinks:load', function() {
+  // your stuff here
+  //initialisePerformance("performance-chart1","/Amazon.csv","/predictionAmazon.csv");
+  //document.getElementById("chart-perform1").style.display="inline-block";
+  //document.getElementById("chart-perform2").style.display="none";
+  //document.getElementById("chart-perform3").style.display="none";
+  //document.getElementById("chart-perform4").style.display="none";
+  //document.getElementById("chart-perform5").style.display="none";
   
-       
+  //document.getElementById("forecast").innerHTML = mae_result[0]; 
+
+  //console.log("hello world123")
+//});
+
+//function myFunction2() {
+  
+  
+//}   
+    
+    
+
+document.getElementById("per-btn-p").addEventListener("click", function(event) {
+
+  
+  txt_path = ["maeAmazon.txt","maeAAPL.txt","maeNVDA.txt","maeGOOG.txt","maeWMT.txt"]
+  mae_result = []
+  
+  const fetchPromises = txt_path.map(path =>
+      fetch(path)
+        .then((res) => res.text())
+        .then((text) => {
+          mae_result.push(Number(text).toFixed(2));
+        })
+        .catch((e) => console.error(e))
+    );
+
+    document.getElementById("performances-page").style.display="flex";
+    document.getElementsByClassName("perform-main-title")[0].style.height = 0;
+    
+});
    
 
 document.getElementById("first-p").addEventListener("click", function(event) {
-    event.preventDefault();
-    initialisePerformance("performance-chart1","/Amazon.csv","/predictionAmazon.csv");
-    document.getElementById("chart-perform1").style.display="inline-block";
-    document.getElementById("chart-perform2").style.display="none";
-    document.getElementById("chart-perform3").style.display="none";
-    document.getElementById("chart-perform4").style.display="none";
-    document.getElementById("chart-perform5").style.display="none";
-    
-    document.getElementById("forecast").innerHTML = mae_result[0]; 
+   event.preventDefault();
+   initialisePerformance("performance-chart1","/Amazon.csv","/predictionAmazon.csv");
+  document.getElementById("chart-perform1").style.display="inline-block";
+  document.getElementById("chart-perform2").style.display="none";
+  document.getElementById("chart-perform3").style.display="none";
+  document.getElementById("chart-perform4").style.display="none";
+  document.getElementById("chart-perform5").style.display="none";
+  
+  document.getElementById("forecast").innerHTML = mae_result[0]; 
+  document.getElementById("perform-title").style.display="block";
+  document.getElementById("perform-title").innerHTML = "Amazon";
 });
 
 document.getElementById("second-p").addEventListener("click", function(event) {
@@ -132,7 +169,9 @@ document.getElementById("second-p").addEventListener("click", function(event) {
     document.getElementById("chart-perform5").style.display="none";
 
     document.getElementById("forecast").innerHTML = mae_result[1];
-    
+    document.getElementById("perform-title").style.display="block";
+    document.getElementById("perform-title").innerHTML = "Apple";
+
 });
 
 document.getElementById("third-p").addEventListener("click", function(event) {
@@ -146,6 +185,8 @@ document.getElementById("third-p").addEventListener("click", function(event) {
     document.getElementById("chart-perform5").style.display="none";
 
     document.getElementById("forecast").innerHTML = mae_result[2]; 
+    document.getElementById("perform-title").style.display="block";
+    document.getElementById("perform-title").innerHTML = "Nvidia";
   
 });
 
@@ -160,6 +201,8 @@ document.getElementById("forth-p").addEventListener("click", function(event) {
     document.getElementById("chart-perform5").style.display="none";
 
     document.getElementById("forecast").innerHTML = mae_result[3]; 
+    document.getElementById("perform-title").style.display="block";
+    document.getElementById("perform-title").innerHTML = "Google";
   
 });
 
@@ -172,6 +215,8 @@ document.getElementById("fifth-p").addEventListener("click", function(event) {
     document.getElementById("chart-perform4").style.display="none";
     document.getElementById("chart-perform5").style.display="inline-block";
     document.getElementById("forecast").innerHTML = mae_result[4];
+    document.getElementById("perform-title").style.display="block";
+    document.getElementById("perform-title").innerHTML = "Walmart";
     
 });
 

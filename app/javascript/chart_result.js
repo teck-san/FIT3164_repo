@@ -191,6 +191,28 @@ async function initialiseChart(id_name,id_name2,inputCSVFilePath,outputCSVFilePa
     ],
     },
     options: {
+      tooltips : {
+        xPadding: 20,
+        yPadding: 20,
+        bodyFontSize : 20,
+        callbacks: {
+          title : function(){
+            return '';
+
+          },
+          label: function(tooltipItem, data) {
+              const date = data.labels[tooltipItem.index];
+              const closePrice = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+
+              // Round off the close price to 2 decimal places
+              const roundedClosePrice = closePrice.toFixed(2);
+
+              return `${date}  -  ${roundedClosePrice} USD`;
+          }
+      },
+
+      },
+      legend: {display : true},
       annotation:{
         annotations:[{
           type : 'line',
@@ -225,11 +247,14 @@ async function initialiseChart(id_name,id_name2,inputCSVFilePath,outputCSVFilePa
     scales: {
         xAxes : [{
           gridLines:{color:"rgba(0,0,0,0)"},
-        }],
+        },
+        ],
         
-        x: { type : 'linear'},
+        x: { type : 'linear'
+   },
         y: {
-        beginAtZero: true
+        beginAtZero: true,        
+
         }
     }
     }})}
@@ -255,12 +280,17 @@ function myFunction() {
   
   initialiseChart("myChart","myChart6", "/Amazon.csv","/predictionAmazon.csv");
   document.getElementById("vis-title").innerHTML = "Amazon"; 
+
+
+
+  
 }
 
 
 document.getElementById("first").addEventListener("click", async function(event) {
  
-  
+  initialiseChart("myChart","myChart6", "/Amazon.csv","/predictionAmazon.csv");
+  document.getElementById("vis-title").innerHTML = "Amazon"; 
   
   
 
