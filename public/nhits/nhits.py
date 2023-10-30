@@ -5,7 +5,6 @@ from neuralforecast.core import NeuralForecast
 from neuralforecast.losses.pytorch import MAE,MSE,DistributionLoss, HuberLoss
 from neuralforecast.losses.numpy import mae, mse,mape
 from sklearn.preprocessing import MinMaxScaler
-import numpy as np
 import pandas as pd
 import os
 import sys
