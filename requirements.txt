@@ -1,0 +1,10 @@
+numpy==1.21.0
+pandas>=1.3.0
+sklearn
+neuralforecast
+torch
+os
+sys
+requests
+io
+json
