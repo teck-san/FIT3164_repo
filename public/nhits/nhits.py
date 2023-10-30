@@ -7,7 +7,6 @@ from neuralforecast.losses.numpy import mae, mse,mape
 from sklearn.preprocessing import MinMaxScaler
 import numpy as np
 import pandas as pd
-import torch
 import os
 import sys
 import requests
@@ -83,7 +82,6 @@ def predict_in_sample(filename):
     with open('public/mae.txt', 'w') as file:
         # Write mae score  to the file
         file.write(str(mae_score))
-    torch.cuda.empty_cache()
     return mae_score
 
 #perform prediction on future stock price based on recent data from api  
@@ -100,7 +98,6 @@ def predict(stock_name):
     close_prediction['NHITS'] = close_prediction['NHITS'].apply(lambda y: descale_value(y, scale))
     df[-120:].to_csv('public/input.csv',index=False)
     close_prediction.to_csv('public/prediction.csv', index=False)
-    torch.cuda.empty_cache()
     return 0
 
 
