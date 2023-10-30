@@ -6,16 +6,29 @@ class HomeController < ApplicationController
     
     
     def index
-        #@para = params[:count]
-        #PyCall.sys.path.append('./public/nhits')
-
-        #app=PyCall.import_module("nhits")
-        #mae= app.predict_in_sample("./public/GOOG.csv","GOOG")
+        @stockname = params[:search]
+        PyCall.sys.path.append('./public/nhits')
+        @return_status = nil
+        app=PyCall.import_module("nhits")
+        @return_status= app.predict(@stockname)
+        
+        print(@return_status)
         #mae = mae.round(2) 
 
 
+        if @return_status === 0
+            @flag = true
 
+        elsif @return_status == -1
+            @flag = false
 
+        elsif @return_status == -2
+            @flag = false
+        elsif @return_status == -3
+            @flag = false
+        end
+
+        
     end
 
 

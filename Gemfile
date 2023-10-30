@@ -27,11 +27,15 @@ gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
+# ransack
+gem "ransack"
 
 # chart js
 gem 'chart-js-rails'
 
 gem "tailwindcss-rails", "~> 2.0"
+
+gem 'jquery-rails'
 
 
 # Use Redis adapter to run Action Cable in production

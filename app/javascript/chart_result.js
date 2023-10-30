@@ -1,7 +1,9 @@
 // Code using $ as usual goes here.
 
-async function fetchCloseValues(csvFilePath) {
-  const response = await fetch(csvFilePath);
+//this function is to fetch stock close price from csv file
+async function fetchCloseValues() {
+  
+  const response = await fetch('/input.csv');
 
   //Check if the response is status is not ok
   if (!response.ok) {
@@ -11,21 +13,20 @@ async function fetchCloseValues(csvFilePath) {
     
   const results = Papa.parse(csvString, { header: true });
 
-  if (results.data.length < 180) {
-    throw new Error(`The CSV file at ${csvFilePath} contains fewer than 180 data points. Found: ${results.data.length} data points.`);
-  }
+  
   let closeValues = results.data.map(row => row['Close']);
   let label = results.data.map(row=> row['Date']);
-  closeValues = closeValues.slice(-180,-60).map(value=>parseFloat(value));
-  label = label.slice(-180,-60);
+  closeValues = closeValues.slice(0, 120);
+  label = label.slice(0,120);
+  
 
   return {label , closeValues};
 }
 
 
-
-async function fetchPredictedValues(csvFilePath){
-  const response = await fetch(csvFilePath);
+//this function is to fetch stock prediction price from csv file
+async function fetchPredictedValues(){
+  const response = await fetch('/prediction.csv');
 
   if (!response.ok) {
     throw new Error(`Failed to fetch CSV file from ${csvFilePath}. Status: ${response.status} ${response.statusText}`);
@@ -41,12 +42,12 @@ async function fetchPredictedValues(csvFilePath){
 }
 
 
-
-async function combineDataAndLabel (inputCSVFilePath,outputCSVFilePath){
+//combine data for plotting
+async function combineDataAndLabel (){
 const [ amazon , prediction] = await Promise.all(
   [
-    fetchCloseValues(inputCSVFilePath),
-    fetchPredictedValues(outputCSVFilePath)
+    fetchCloseValues(),
+    fetchPredictedValues()
   ]);
 
   const combinedData = amazon.closeValues.concat(prediction.predictValue);
@@ -56,13 +57,14 @@ const [ amazon , prediction] = await Promise.all(
 }
 
 
-
-async function initialiseChart(id_name,id_name2,inputCSVFilePath,outputCSVFilePath){
+//this function initialise chart to be shown in the web page
+async function initialiseChart(){
   
-  const {combinedData,combinedLabels} = await combineDataAndLabel(inputCSVFilePath,outputCSVFilePath);
-  let canvas = document.getElementById(id_name);
+  const {combinedData,combinedLabels} = await combineDataAndLabel();
+  
+  let canvas = document.getElementById("myChart");
   let ctx = canvas.getContext('2d');
-  let canvas2 = document.getElementById(id_name2);
+  let canvas2 = document.getElementById("myChart6");
   let ctx2 = canvas2.getContext('2d');
   document.getElementById("perform-start").innerHTML = "Start Date: "+combinedLabels[combinedLabels.length-60] ;  
   document.getElementById("perform-end").innerHTML = "End Date: "+combinedLabels[combinedLabels.length-1];  
@@ -86,6 +88,7 @@ async function initialiseChart(id_name,id_name2,inputCSVFilePath,outputCSVFilePa
   
   document.getElementById("perform-percent").innerHTML = w_msg + Math.round((((combinedData[combinedData.length-1]/combinedData[combinedData.length-60])-1 )*100)*100)/100+"%";  
   let gradient = ctx.createLinearGradient (0,0,canvas.clientWidth,0);
+  //set colour gradient to differentiate the true and predicted data
   gradient.addColorStop(0,'black');
   gradient.addColorStop(0.68,'black');
   gradient.addColorStop(0.68,'blue');
@@ -124,6 +127,7 @@ async function initialiseChart(id_name,id_name2,inputCSVFilePath,outputCSVFilePa
 
   
   return new Promise((resolve) => {new Chart (ctx2,{
+    //slope chart to see stock overview
     type: 'line',
     data: {
       labels : [combinedLabels[combinedLabels.length-60],combinedLabels[combinedLabels.length-1]],
@@ -178,6 +182,7 @@ async function initialiseChart(id_name,id_name2,inputCSVFilePath,outputCSVFilePa
 
 
   new Chart(ctx, {
+    //line chart to see stock price over time
     type: 'line',
     data: {
     labels: combinedLabels,
@@ -205,7 +210,8 @@ async function initialiseChart(id_name,id_name2,inputCSVFilePath,outputCSVFilePa
               const closePrice = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
 
               // Round off the close price to 2 decimal places
-              const roundedClosePrice = closePrice.toFixed(2);
+
+              const roundedClosePrice = parseFloat(closePrice).toFixed(2);
 
               return `${date}  -  ${roundedClosePrice} USD`;
           }
@@ -268,6 +274,7 @@ async function initialiseChart(id_name,id_name2,inputCSVFilePath,outputCSVFilePa
   
 };
 
+
 //window.onload = function() {
 //alert("byebye")
 //}
@@ -276,10 +283,58 @@ async function initialiseChart(id_name,id_name2,inputCSVFilePath,outputCSVFilePa
 //  alert("HIHI")
 //}
 
-function myFunction() {
+document.querySelector(".search-form").addEventListener("submit", function(event) {
+  localStorage.setItem('searchClicked', 'true');
+  console.log("xxxxxxxxxxxxxxxxx")
   
-  initialiseChart("myChart","myChart6", "/Amazon.csv","/predictionAmazon.csv");
-  document.getElementById("vis-title").innerHTML = "Amazon"; 
+});
+
+$(document).ready(function() {
+  // Your code
+  console.log("jquery works")
+  console.log("yesyeys")
+  const wasClicked = localStorage.getItem('searchClicked');
+
+  if (wasClicked === 'true') {
+    console.log("cca")
+      const container = document.getElementById('flag');
+      const value = container.getAttribute('data-value');
+
+      if (value == "true"){
+          console.log("hahah");
+          initialiseChart();
+        
+      }else{
+        alert("Invalid stock symbol. Please try again with a valid symbol.")
+      }
+
+      // Remove the flag from local storage
+      localStorage.removeItem('searchClicked');
+  }
+});
+document.addEventListener("DOMContentLoaded", function() {
+ 
+});
+
+
+function loadFunction() {
+  console.log("html htl htl")
+
+  //const container = document.getElementById('flag');
+ // const value = container.getAttribute('data-value');
+  
+
+ // if (value == "true"){
+  //  console.log(value);
+ //   initialiseChart("myChart","myChart6", "/Amazon.csv","/predictionAmazon.csv");
+ //   document.getElementById("vis-title").innerHTML = "xxx"; 
+ // }
+  
+  //initialiseChart("myChart","myChart6", "/Amazon.csv","/predictionAmazon.csv");
+  //document.getElementById("vis-title").innerHTML = "Amazon"; 
+  
+ 
+
 
 
 

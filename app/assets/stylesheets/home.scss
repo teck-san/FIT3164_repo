@@ -3,11 +3,12 @@ body {background-color: rgb(245, 245, 245);}
 .main-title{
     
     
-    background-image: url("background.jpg");
+  
     padding: 5rem;
     background-size: 25%;
     display: flex;
     justify-content: center;
+    background-color: black;
 
 
     h1{
@@ -246,3 +247,43 @@ body {background-color: rgb(245, 245, 245);}
         }
     }
   }
+
+
+
+  .search-form {
+    margin: 20px;
+
+  }
+  
+  .search-input {
+    padding: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .search-button {
+    padding: 5px 15px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+  }
+
+  #show-button{
+    display: none;
+    justify-content: center;
+  .showbtn{
+    
+    background-color: #34c8db;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    border-radius: 2rem;
+    cursor: pointer;
+
+}
+
+.showbtn:hover, .showbtn:focus {
+    background-color: #47db34;
+  }
+}
+  
