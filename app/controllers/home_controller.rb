@@ -1,6 +1,6 @@
 
 require 'pycall/import'
-include PyCall::Import
+
 
 class HomeController < ApplicationController
     
